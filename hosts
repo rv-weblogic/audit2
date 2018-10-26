@@ -1,0 +1,13 @@
+[audit_admin] 
+weblogic-01 ansible_host=192.168.3.147 ansible_port=22 ansible_user=venerari
+
+[audit_as01] 
+weblogic-01 ansible_host=192.168.3.147 ansible_port=22 ansible_user=venerari
+
+[audit_as02] 
+weblogic-02 ansible_host=192.168.3.93 ansible_port=22 ansible_user=venerari
+
+[audit:children]
+audit_admin
+audit_as01
+audit_as02

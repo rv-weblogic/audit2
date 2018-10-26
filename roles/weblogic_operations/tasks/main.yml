@@ -1,0 +1,38 @@
+---
+
+- include_tasks: common.yml
+
+##########
+### Admin
+##########
+- include_tasks: start_admin.yml
+  when: server | default("") == "admin" and start | default(False) == True
+
+- include_tasks: stop_admin.yml
+  when: server | default("") == "admin" and stop | default(False) == True
+
+- block:
+   - include_tasks: stop_admin.yml
+   - include_tasks: start_admin.yml
+  when: server | default("") == "admin"  and restart | default(False) == True
+
+############
+### Managed
+############
+- include_tasks: start_managed.yml
+  when: server | regex_search("^as\d+") and start | default(False) == True
+
+- include_tasks: stop_managed.yml
+  when: server | regex_search("^as\d+") and stop | default(False) == True
+
+- block:
+   - include_tasks: stop_managed.yml
+   - include_tasks: start_managed.yml
+  when: server | regex_search("^as\d+") and restart | default(False) == True
+
+############
+### Clean
+############
+
+- include_tasks: clean.yml
+  when: server | regex_search("^a.+") and clean | default(False) == True

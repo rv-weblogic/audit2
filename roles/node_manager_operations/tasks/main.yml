@@ -1,0 +1,14 @@
+---
+
+- include_tasks: common.yml
+
+- include_tasks: start.yml
+  when: start | default(False) == True
+
+- include_tasks: stop.yml
+  when: stop | default(False) == True
+
+- block:
+   - include_tasks: stop.yml
+   - include_tasks: start.yml
+  when: restart | default(False) == True

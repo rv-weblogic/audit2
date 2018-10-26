@@ -1,0 +1,19 @@
+---
+
+- name: Write hostname and IP address to hosts file admin
+  lineinfile: 
+      dest: /etc/hosts 
+      line: "{{hostvars[groups['audit_admin'][0]].ansible_host}} {{hostvars[groups['audit_admin'][0]].inventory_hostname}}"
+  ignore_errors: true    
+  
+- name: Write hostname and IP address to hosts file as01
+  lineinfile: 
+      dest: /etc/hosts 
+      line: "{{hostvars[groups['audit_as01'][0]].ansible_host}} {{hostvars[groups['audit_as01'][0]].inventory_hostname}}"
+  ignore_errors: true      
+  
+- name: Write hostname and IP address to hosts file as02
+  lineinfile: 
+      dest: /etc/hosts 
+      line: "{{hostvars[groups['audit_as02'][0]].ansible_host}} {{hostvars[groups['audit_as02'][0]].inventory_hostname}}"
+  ignore_errors: true  

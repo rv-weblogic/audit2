@@ -1,0 +1,28 @@
+---
+     
+- name:           Make sure destination directory exists 
+  file:
+      path:       "{{ staging_folder.domain }}/deployment/"
+      state:      directory
+      recurse:    yes
+
+- name:           Download ear app
+  get_url:
+    url:          "{{weblogic_app_url}}{{weblogic_app_file}}"
+    dest:         "{{ staging_folder.domain }}/deployment/{{ weblogic_app_file }}"
+    mode:         0755
+
+- name:           Extract ear app
+  unarchive:
+    src:          "{{ staging_folder.domain }}/deployment/{{ weblogic_app_file }}"
+    dest:         "{{ staging_folder.domain }}/deployment/"
+    copy:         no
+    
+- name:           Copy over the deployment package
+  copy_r:
+      remote_src: yes
+      src:        "{{ staging_folder.domain }}/deployment/"
+      dest:       "{{ domain_account.home }}/"
+      
+- name:           Deploy {{ weblogic_domain_name }} domain
+  command:        "sudo {{ staging_folder.domain }}/{{ weblogic_automata_binary }} deploy {{ staging_folder.domain }}/{{ weblogic_domain_name }}.json"

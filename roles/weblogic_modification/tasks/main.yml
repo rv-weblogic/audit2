@@ -1,0 +1,12 @@
+---
+
+- include_tasks: common.yml
+
+- include_tasks: build.yml
+  when: build | default(False) == True
+
+- include_tasks: config.yml
+  when: config | default(False) == True
+  
+- include_tasks: deploy.yml
+  when: deploy | default(False) == True

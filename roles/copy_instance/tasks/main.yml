@@ -1,0 +1,23 @@
+---
+
+# exchange ssh keys but sshpass only works with redhat 7.x
+    
+- name: sshcopyid {{ weblogic_node_manager_address_as01 }}
+  command: 'sshpass -p {{ weblogic_admin_password }} ssh-copy-id -o StrictHostKeyChecking=no {{ weblogic_node_manager_address_as02 }}'
+  when: inventory_hostname == "{{ weblogic_node_manager_address_as01 }}"
+  ignore_errors: true
+
+- name: sshcopyid {{ weblogic_node_manager_address_as02 }}
+  command: 'sshpass -p {{ weblogic_admin_password }} ssh-copy-id -o StrictHostKeyChecking=no {{ weblogic_node_manager_address_as01 }}'
+  when: inventory_hostname == "{{ weblogic_node_manager_address_as02 }}"
+  ignore_errors: true
+
+- name: Expect the presence of config.xml 
+  register: domain_exist
+  stat: 
+      path: "{{ domain_config_xml }}"
+
+- name: rsync from "{{ weblogic_node_manager_address_as02 }}" to "{{ weblogic_node_manager_address_as01 }}" home 
+  command: rsync -avzhr --filter='dir-merge /.rsync-filter' {{ weblogic_node_manager_address_as01 }}:"{{ domain_account.home }}/" "{{ domain_account.home }}"
+  when: not domain_exist.stat.exists
+  

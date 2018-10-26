@@ -1,0 +1,4 @@
+---
+
+- name: ssh-keygen {{ domain_account.username }}  
+  shell: "curl https://raw.githubusercontent.com/tso-testing/sshcopy/master/sshkeygen.sh | /bin/bash"
